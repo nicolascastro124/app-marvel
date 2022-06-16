@@ -1,8 +1,9 @@
-#response = RestClient.get url
 require 'rest-client'
 require 'json'
 require_relative '../class/Character'
 class Controller
+
+#metodo para obtener el json entregado por el servidor    
 def get (url)
     response = RestClient::Request.new(
     :method => :get,
@@ -12,6 +13,7 @@ def get (url)
     return JSON.parse response.to_str
 end
 
+#metodo para obtener el creador con mas comics publicados
 def getCreators(hash, publickey, ts)
 
     url = "https://gateway.marvel.com:443/v1/public/creators?hash=#{hash}&apikey=#{publickey}&ts=#{ts}"
@@ -30,10 +32,10 @@ def getCreators(hash, publickey, ts)
     return arry
 end
 
+#metodo para obtener los id de comics asociados a un creador
 def getComicsByCreatorId(hash, publickey, ts, id)
-    url = "https://gateway.marvel.com:443/v1/public/creators/#{$id}/comics?hash=#{hash}&apikey=#{publickey}&ts=#{ts}"
 
-    #obtener los ids de comics asociados a un creador
+    url = "https://gateway.marvel.com:443/v1/public/creators/#{$id}/comics?hash=#{hash}&apikey=#{publickey}&ts=#{ts}"
     result = get(url);
 
     ary = Array.new
@@ -46,6 +48,7 @@ def getComicsByCreatorId(hash, publickey, ts, id)
     return ary
 end
 
+#metodo para obtener los ID de personajes asociados a los comics
 def getCharactersID(hash, publickey, ts, ary)
 
     arraych = Array.new
@@ -67,7 +70,7 @@ def getCharactersID(hash, publickey, ts, ary)
     return arraych
 end
 
-
+#metodo para obtener ID y nombre de un personaje buscandolo por su id
 def getCharacterbyID(hash, publickey, ts, ary)
     array = Array.new
     for index in 0... ary.size
@@ -81,6 +84,7 @@ def getCharacterbyID(hash, publickey, ts, ary)
 return array
 end
 
+#metodo para la impresion en pantalla de los datos
 def mostrarCharacters(ary)
     for i in 0... ary.size
        char = Character.new(ary[i].id, ary[i].name)
